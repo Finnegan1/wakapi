@@ -4,6 +4,8 @@ services:
     ports:
       - 3001:3000
     restart: unless-stopped
+    network:
+      - wakaapi-network
     environment:
       # See README.md and config.default.yml for all config options
       WAKAPI_DB_TYPE: "postgres"
@@ -22,6 +24,8 @@ services:
   db:
     image: postgres:17
     restart: unless-stopped
+    network:
+      - wakaapi-network
     environment:
       POSTGRES_USER: "wakapi"
       POSTGRES_PASSWORD_FILE: "/run/secrets/db_password"        # alternatively, set POSTGRES_PASSWORD directly without the use of secrets
@@ -43,3 +47,7 @@ secrets:
 
 volumes:
   wakapi-db-data: {}
+
+networks:
+  wakaapi-network:                   # Network shared between wakapi and db
+    driver: bridge
